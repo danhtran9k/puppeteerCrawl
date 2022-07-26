@@ -39,16 +39,16 @@ const getFile = (b64data) => {
 		const pageDataLoad = "div.page";
 		const attributeDataLoad = "data-loaded";
 		const canvasSelector = ".canvasWrapper>canvas";
-		const wait = async () => await new Promise((res) => setTimeout(res, 200));
+		const wait = async () => await new Promise((res) => setTimeout(res, 100));
 
 		const arrPage = document.querySelectorAll(pageDataLoad);
 		const result = [];
 		for (const singlePage of arrPage) {
 			singlePage.scrollIntoView();
 			while (!singlePage.getAttribute(attributeDataLoad)) {
-				console.log("🚀 index-L49-singlePage.getAttribute(attributeDataLoad)", singlePage.getAttribute(attributeDataLoad));
 				await wait();
 			}
+			await wait();
 			const pageNum = singlePage.getAttribute("data-page-number");
 			const canvasPage = singlePage.querySelector(canvasSelector);
 			result.push({ pageNum, dataUrl: canvasPage.toDataURL() });
@@ -58,7 +58,7 @@ const getFile = (b64data) => {
 
 	arrDataUrl.forEach(({ pageNum, dataUrl }) => {
 		const fileName = `${pageNum}.png`;
-		const saveDir = "./";
+		const saveDir = "./test/";
 		const option = { url: dataUrl, dest: saveDir + fileName };
 		// download
 		// 	.image(option)
@@ -67,7 +67,7 @@ const getFile = (b64data) => {
 		// 	})
 		// 	.catch((err) => console.error(err));
 		const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
-		fs.writeFile(`${pageNum}.png`, base64Data, "base64", function (err) {
+		fs.writeFile(`./test/${pageNum}.png`, base64Data, "base64", function (err) {
 			console.log("🚀 index-L57-err", err);
 		});
 	});
